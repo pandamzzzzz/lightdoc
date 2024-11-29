@@ -1,0 +1,476 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+#app {
+    display: flex;
+    height: 100vh;
+    max-width: 1920px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar {
+    width: 300px;
+    min-width: 300px;
+    background-color: #fff;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.sidebar-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar-actions button {
+    flex: 1;
+    font-size: 13px;
+    padding: 8px 12px;
+    background-color: #fff;
+    color: #007bff;
+    border: 1px solid #007bff;
+    transition: all 0.2s;
+}
+
+.sidebar-actions button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.document-list {
+    margin-top: 20px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.document-list div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.document-list div:hover {
+    background-color: #f0f0f0;
+}
+
+.document-list div.active {
+    background-color: #e8e8e8;
+    border-left: 3px solid #007bff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.editor {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.editor-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 50%;
+    height: calc(100vh - 180px);
+    padding: 20px;
+    border: 1px solid #ddd;
+    resize: none;
+    font-family: 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    background-color: #fafafa;
+    transition: border-color 0.2s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.preview {
+    width: 50%;
+    height: calc(100vh - 180px);
+    padding: 0;
+    border: 1px solid #ddd;
+    margin-left: 10px;
+    overflow-y: auto;
+    background-color: white;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex-shrink: 0;
+}
+
+.preview * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.markdown-body {
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+button {
+    margin: 10px 0;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.doc-item {
+    margin: 2px 0;
+    padding: 6px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 0;
+}
+
+.doc-item:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.doc-name {
+    flex-grow: 1;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+}
+
+.doc-actions {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.doc-item:hover .doc-actions {
+    opacity: 1;
+}
+
+.icon-btn {
+    padding: 4px 8px;
+    margin: 0 2px;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #ddd;
+    color: #666;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.icon-btn.delete:hover {
+    background-color: #ff4444;
+    color: white;
+    border-color: #ff4444;
+}
+
+.folder-item {
+    margin: 2px 0;
+}
+
+.folder-header {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    transition: all 0.2s;
+}
+
+.folder-header:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.folder-toggle {
+    margin-right: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.folder-name {
+    font-weight: bold;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+}
+
+.folder-actions {
+    opacity: 0;
+    gap: 4px;
+    display: flex;
+    transition: opacity 0.2s;
+}
+
+.folder-header:hover .folder-actions {
+    opacity: 1;
+}
+
+.rename-input {
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: -3px 0;
+    width: 250px;
+    height: 24px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    min-width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.folder-option {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    transition: all 0.2s;
+}
+
+.folder-option:hover {
+    background-color: #f8f9fa;
+    padding-left: 20px;
+}
+
+.folder-list {
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.folder-header.drag-over,
+.doc-item.drag-over {
+    background-color: #e8e8e8;
+    border: 2px dashed #666;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+  
+.doc-item.dragging {
+    opacity: 0.5;
+    background-color: #f0f0f0;
+    transform: scale(0.98);
+    transition: all 0.2s ease;
+}
+
+.editor-header {
+    padding: 10px 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.save-status {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #e9ecef;
+}
+
+.save-status.unsaved {
+    color: #dc3545;
+    background-color: #fff3f3;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.editor-footer {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 1;
+}
+
+.save-button {
+    margin: 0;
+    background-color: #28a745;
+    min-width: 100px;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}
+
+.icon-btn[title="新建文档"] {
+    color: #28a745;
+    border-color: #28a745;
+    font-weight: bold;
+}
+
+.icon-btn[title="新建文档"]:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.folder-actions .icon-btn.delete {
+    font-size: 14px;
+    padding: 2px 8px;
+}
+
+.doc-item.active {
+    background-color: #e8e8e8;
+    border-left: 3px solid #007bff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.active .doc-name {
+    font-weight: 500;
+    color: #007bff;
+}
+
+/* RST 特定样式 */
+.preview .system-message {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+    color: #856404;
+}
+
+.preview .docutils {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.preview .document {
+    margin: 0;
+    padding: 0;
+    width: auto !important;  /* 覆盖可能的内联样式 */
+}
+
+.preview .docutils.literal {
+    background-color: #f8f9fa;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Consolas', monospace;
+}
+
+.preview .docutils.literal-block {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-family: 'Consolas', monospace;
+    white-space: pre-wrap;
+    line-height: 1.4;
+    width: auto !important;  /* 覆盖可能的内联样式 */
+}
+
+/* Pygments 代码高亮样式 */
+.preview .highlight {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+    width: auto !important;  /* 覆盖可能的内联样式 */
+}
+
+.preview .highlight pre {
+    margin: 0;
+    font-family: 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    width: auto !important;  /* 覆盖可能的内联样式 */
+}
+  

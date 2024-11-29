@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>文档管理系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
+</head>
+<body>
+    <div id="app">
+        <div class="sidebar">
+            <div class="sidebar-actions">
+                <button @click="createNewDocument">新建文档</button>
+                <button @click="createNewFolder">新建文件夹</button>
+            </div>
+            <div class="document-list">
+                <div v-for="folder in foldersTree" :key="'folder-'+folder.id" class="folder-item">
+                    <div class="folder-header" :style="{ marginLeft: folder.level * 20 + 'px' }" @dragover.prevent="handleDragOver($event, folder)" @dragleave.prevent="handleDragLeave($event)" @drop.prevent="handleDrop($event, folder)">
+                        <span class="folder-toggle" @click.stop="toggleFolder(folder)">
+                            [[ folder.expanded ? '▼' : '▶' ]]
+                        </span>
+                        <span class="folder-name" 
+                              @click.stop="toggleFolder(folder)"
+                              @dblclick.stop="startRename(folder, $event)">
+                            [[ folder.name ]]
+                        </span>
+                        <div class="folder-actions">
+                            <button class="icon-btn" @click.stop="createNewDocumentInFolder(folder)" title="新建文档">+</button>
+                            <button class="icon-btn" @click.stop="startRename(folder, $event)" title="重命名">✎</button>
+                            <button v-if="folder.id !== 'root'" class="icon-btn delete" @click.stop="deleteFolder(folder)" title="删除文件夹">×</button>
+                        </div>
+                    </div>
+                    <div v-show="folder.expanded">
+                        <div v-for="doc in folder.documents" 
+                             :key="doc.id" 
+                             :style="{ marginLeft: (folder.level + 1) * 20 + 'px' }"
+                             :class="{ active: currentDoc && currentDoc.id === doc.id }">
+                            <div class="doc-item" draggable="true" @dragstart="handleDragStart($event, doc)" @dragend="handleDragEnd" @dragover.prevent @drop.prevent="handleDrop($event, doc)">
+                                <span class="doc-name" @click="openDocument(doc)" @dblclick="startRename(doc, $event)">[[ doc.name ]]</span>
+                                <div class="doc-actions">
+                                    <button class="icon-btn" @click="startRename(doc, $event)" title="重命名">✎</button>
+                                    <button class="icon-btn delete" @click="deleteDocument(doc)" title="删除">×</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div v-if="currentDoc" class="editor">
+                <div class="editor-header">
+                    <span class="save-status" :class="{ 'unsaved': saveStatus === '未保存' }">
+                        [[ saveStatus ]]
+                    </span>
+                </div>
+                <div class="editor-content">
+                    <textarea v-model="documentContent" @input="updatePreview"></textarea>
+                    <div class="preview markdown-body" v-html="renderedContent"></div>
+                </div>
+                <div class="editor-footer">
+                    <button class="save-button" @click="saveDocument">保存文档</button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动文档对话框 -->
+        <div v-if="showMoveToFolder" class="modal">
+            <div class="modal-content">
+                <h3>移动文档到文件夹</h3>
+                <div class="folder-list">
+                    <div class="folder-option" @click="moveToFolder(null)">
+                        未分类文档
+                    </div>
+                    <div v-for="folder in foldersTree" 
+                         :key="folder.id"
+                         :style="{ marginLeft: folder.level * 20 + 'px' }"
+                         class="folder-option"
+                         @click="moveToFolder(folder)">
+                        [[ folder.name ]]
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button @click="showMoveToFolder = false">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/lib/marked.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
